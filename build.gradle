@@ -21,9 +21,9 @@ apply plugin: 'kotlinx-serialization'
 
 apply from: 'https://raw.githubusercontent.com/thedarkcolour/KotlinForForge/site/thedarkcolour/kotlinforforge/gradle/kff-3.1.0.gradle'
 
-version = '0.0.1'
-group = 'notPlancha.yacm'
-archivesBaseName = 'yacm'
+version = '1.0.0'
+group = 'example.examplemod'
+archivesBaseName = 'examplemod'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
@@ -81,25 +81,33 @@ minecraft {
 sourceSets.main.resources { srcDirs 'src/generated/resources/' }
 
 repositories {
-    // api "curse.maven:<descriptor>-<projectid>:<fileids>"
-    // projectid - on curseforgepage of mod
-    // fileids - on curseforge file url
     maven {
+        // Curseforge mods
+        name "Wyn Price's Curse Maven"
+        // api "curse.maven:<descriptor>-<projectid>:<fileids>"
+        // projectid - on curseforgepage of mod
+        // fileids - on curseforge file url
         url "https://cursemaven.com"
         content {
             includeGroup "curse.maven"
         }
-
+    }
+    maven {
+        // location of the maven that hosts JEI files
+        name "Progwml6 maven"
+        url "https://dvs1.progwml6.com/files/maven/"
     }
 }
 
 dependencies {
     // Use the latest version of Minecraft Forge
     minecraft 'net.minecraftforge:forge:1.18.2-40.1.68'
-    // jei-1.18.2-9.7.1.232.jar
-    api "curse.maven:jei-238222:3885885"
-    // theoneprobe-1.18-5.0.4.jar
-    api "curse.maven:top-245211:3665852"
+    // JEI
+    compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
+
+    // theoneprobe-1.18-5.1.0.jar
+    implementation fg.deobf("curse.maven:the-one-probe-245211:3671753")
 }
 
 compileKotlin {
@@ -109,8 +117,8 @@ compileKotlin {
 jar {
     manifest {
         attributes([
-                'Specification-Title': "yamc",
-                'Specification-Vendor': "notPlancha",
+                'Specification-Title': "examplemod",
+                'Specification-Vendor': "examplemodsareus",
                 'Specification-Version': "1", // We are version 1 of ourselves
                 'Implementation-Title': project.name,
                 'Implementation-Version': project.version,
